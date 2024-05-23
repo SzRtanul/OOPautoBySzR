@@ -5,7 +5,6 @@
 package program;
 
 import control.EI;
-import java.util.stream.Stream;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import objektumok.Auto;
@@ -327,14 +326,17 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     }//GEN-LAST:event_btnResetUezemaDefektActionPerformed
 
     private void btnGarazsbaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGarazsbaActionPerformed
-        cmbAutok.addItem(Txt_autoneve.getText());
-        //cmbAutok.setSelectedIndex(1);
-        autok = AuxiliaryFunctions.add(autok, new Auto(
-                Chk_beintitva.isSelected(), 
-                (int)Mum_uzemanyagszint.getValue(), 
-                Chk_defekt.isSelected(), 
-                (int)Mum_potkerek.getValue()));
-        
+        if(!Txt_autoneve.getText().equals("") && !bennevan(new String[]{"v"}/*cmbAutok.getComponents()*/, Txt_autoneve.getText())){
+            cmbAutok.addItem(Txt_autoneve.getText());
+            //cmbAutok.setSelectedIndex(1);
+            Auto auto2 = new Auto(
+                    Chk_beintitva.isSelected(), 
+                    (int)Mum_uzemanyagszint.getValue(), 
+                    Chk_defekt.isSelected(), 
+                    (int)Mum_potkerek.getValue());
+            auto2.addListener(this);
+            autok = AuxiliaryFunctions.add(autok, auto2);
+        }
     }//GEN-LAST:event_btnGarazsbaActionPerformed
 
     private void chbDefektActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbDefektActionPerformed
@@ -403,8 +405,17 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             List_autok.removeAll();
         }
     }//GEN-LAST:event_cmbAutokItemStateChanged
+    
     private <T> boolean tombonbelul(T[] tomb, int szam){
         return szam >= 0 && szam < tomb.length;
+    }
+    
+    private <T> boolean bennevan(String[] tomb, String element){
+        boolean both = tomb[0].equals(element);
+        for (int i = 1; i < tomb.length && !both; i++) {
+            both = tomb[i].equals(element);
+        }
+        return both;
     }
     
     private void itemsActive(boolean active){
