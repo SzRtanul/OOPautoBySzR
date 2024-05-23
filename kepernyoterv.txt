@@ -1,0 +1,26 @@
+Üdvözlet!
+Ez egy autó!
+
+Üzemanyagszint: 1
+Motor: Nem megy
+
+Implementált műveletek:
+1. Motor indítása
+2. Tankolás
+3. Láb a gázon
+-1: Kilépés
+
+Válassz egy műveletet: [-intBekér-]: 3
+HIBA: A motor nem megy
+Válassz egy műveletet: [-intBekér-]: 2
+Az üzemanyag szint megnövekedett. Jelenleg 2.
+Válassz egy műveletet: [-intBekér-]: 1
+A motor beindult.
+Válassz egy műveletet: [-intBekér-]: 2
+HIBA: A motor jár. Nem lehet megtankolni.
+Válassz egy műveletet: [-intBekér-]: 2
+Az autó megy. Üzemanyagszint: 1
+Válassz egy műveletet: [-intBekér-]: 2
+Az autó megy. Üzemanyagszint: 0
+Válassz egy műveletet: [-intBekér-]: 2
+HIBA: Nincs elég üzemanyag. A motor leállt.
