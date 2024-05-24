@@ -6,6 +6,7 @@ package program;
 
 import control.EI;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import objektumok.Auto;
 
@@ -326,7 +327,7 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     }//GEN-LAST:event_btnResetUezemaDefektActionPerformed
 
     private void btnGarazsbaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGarazsbaActionPerformed
-        if(!Txt_autoneve.getText().equals("") && !bennevan(new String[]{"v"}/*cmbAutok.getComponents()*/, Txt_autoneve.getText())){
+        if(!Txt_autoneve.getText().equals("") && !bennevan(getAllItemsFromComboBox(cmbAutok), Txt_autoneve.getText())){
             cmbAutok.addItem(Txt_autoneve.getText());
             //cmbAutok.setSelectedIndex(1);
             Auto auto2 = new Auto(
@@ -395,7 +396,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
 
     private void cmbAutokItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbAutokItemStateChanged
         melyikauto = cmbAutok.getSelectedIndex() -1;
-        System.out.println(melyikauto);
         if(tombonbelul(autok, melyikauto)){
             itemsActive(true);
             actionValueChanged();
@@ -423,6 +423,14 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         btnMegy.setEnabled(active);
         btnTankol1.setEnabled(active);
         chbDefekt.setEnabled(active);
+    }
+    
+    private String[] getAllItemsFromComboBox(JComboBox cmb){
+        String[] items = new String[cmb.getItemCount()];
+        for (int i = 0; i < cmb.getItemCount(); i++) {
+            items[i] = String.valueOf(cmb.getItemAt(i));
+        }
+        return items;
     }
     
     /**
