@@ -83,6 +83,7 @@ public class Auto {
     
     public boolean setDefektEsely(int esely){
         this.defektesely = esely >= 0 ? (esely <= 20 ? esely : 20) : 0;
+        broadcast(Broad.adatvaltozas);
         return true;
     }
     

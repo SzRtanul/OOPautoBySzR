@@ -5,9 +5,17 @@
 package program;
 
 import control.EI;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import objektumok.Auto;
 
 /**
@@ -24,6 +32,14 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         autok = new Auto[0];
         this.melyikauto = autok.length > 0 ? 0 : -1;
         initComponents();
+        settingsInitComponents();
+    }
+    
+    public final void settingsInitComponents(){
+        kedvesuzenet();
+        
+        sldEsely.setMaximum(20);
+        itemsActive(false);
     }
 
     /**
@@ -44,7 +60,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         Mum_potkerek = new javax.swing.JSpinner();
         jSeparator1 = new javax.swing.JSeparator();
         Chk_defekt = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         Mum_uzemanyagszint = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
@@ -58,6 +73,9 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         chbDefekt = new javax.swing.JCheckBox();
         btnMegy = new javax.swing.JButton();
         btnTankol1 = new javax.swing.JButton();
+        Bt_indit = new javax.swing.JButton();
+        Bt_leallit = new javax.swing.JButton();
+        Bt_cserel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         List_autok = new javax.swing.JList<>();
@@ -90,8 +108,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
 
         Chk_defekt.setText("Defekt");
 
-        jLabel3.setText("Üzemanyag:");
-
         jLabel5.setText("Üzemanyagszint:");
 
         Mum_uzemanyagszint.setModel(new javax.swing.SpinnerNumberModel(0, 0, 4, 1));
@@ -111,12 +127,7 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
                 .addContainerGap()
                 .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUjAutoLayout.createSequentialGroup()
-                        .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Chk_defekt)
-                            .addGroup(pnlUjAutoLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnResetUezemaDefekt))
+                        .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlUjAutoLayout.createSequentialGroup()
                                 .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
@@ -130,60 +141,63 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
                                     .addGroup(pnlUjAutoLayout.createSequentialGroup()
                                         .addComponent(Mum_uzemanyagszint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(pnlUjAutoLayout.createSequentialGroup()
+                                .addComponent(Chk_beintitva)
+                                .addGap(23, 23, 23)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 2, Short.MAX_VALUE))
                     .addGroup(pnlUjAutoLayout.createSequentialGroup()
                         .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlUjAutoLayout.createSequentialGroup()
-                                .addComponent(Chk_beintitva)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnGarazsba)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(pnlUjAutoLayout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
-                                .addComponent(Txt_autoneve)))
-                        .addContainerGap())))
+                                .addComponent(Txt_autoneve))
+                            .addGroup(pnlUjAutoLayout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(Chk_defekt)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(pnlUjAutoLayout.createSequentialGroup()
+                        .addComponent(btnResetUezemaDefekt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGarazsba)
+                        .addGap(19, 19, 19))))
         );
         pnlUjAutoLayout.setVerticalGroup(
             pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUjAutoLayout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUjAutoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(Txt_autoneve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(Mum_uzemanyagszint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
                 .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlUjAutoLayout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUjAutoLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(Txt_autoneve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnResetUezemaDefekt)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(Mum_uzemanyagszint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlUjAutoLayout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel2))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUjAutoLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(Mum_potkerek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Chk_defekt)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(Mum_potkerek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Chk_beintitva)
+                    .addComponent(Chk_defekt)
+                    .addComponent(Chk_beintitva))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnResetUezemaDefekt)
                     .addComponent(btnGarazsba))
-                .addContainerGap())
+                .addGap(3, 3, 3))
         );
 
         pnlGarazs.setBorder(javax.swing.BorderFactory.createTitledBorder("Garázs"));
@@ -206,6 +220,11 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 sldEselyMouseReleased(evt);
+            }
+        });
+        sldEsely.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sldEselyPropertyChange(evt);
             }
         });
 
@@ -237,6 +256,27 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             }
         });
 
+        Bt_indit.setText("Indít");
+        Bt_indit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bt_inditActionPerformed(evt);
+            }
+        });
+
+        Bt_leallit.setText("Leállít");
+        Bt_leallit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bt_leallitActionPerformed(evt);
+            }
+        });
+
+        Bt_cserel.setText("Kereket cserél");
+        Bt_cserel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bt_cserelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlGarazsLayout = new javax.swing.GroupLayout(pnlGarazs);
         pnlGarazs.setLayout(pnlGarazsLayout);
         pnlGarazsLayout.setHorizontalGroup(
@@ -244,15 +284,26 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             .addGroup(pnlGarazsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlGarazsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chbDefekt)
-                    .addComponent(jLabel4)
-                    .addComponent(cmbAutok, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlGarazsLayout.createSequentialGroup()
-                        .addComponent(btnMegy, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addComponent(btnTankol1))
-                    .addComponent(sldEsely, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(Bt_leallit)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTankol1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlGarazsLayout.createSequentialGroup()
+                        .addGroup(pnlGarazsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chbDefekt)
+                            .addComponent(jLabel4)
+                            .addComponent(cmbAutok, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sldEsely, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlGarazsLayout.createSequentialGroup()
+                                .addComponent(Bt_indit)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnMegy, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(pnlGarazsLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(Bt_cserel)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlGarazsLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnMegy, btnTankol1});
@@ -270,11 +321,17 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
                 .addComponent(sldEsely, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chbDefekt)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlGarazsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMegy)
+                    .addComponent(Bt_indit)
+                    .addComponent(btnMegy))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlGarazsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Bt_leallit)
                     .addComponent(btnTankol1))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Bt_cserel)
+                .addGap(3, 3, 3))
         );
 
         jLabel1.setText("Kiválasztott autó állapota:");
@@ -303,13 +360,13 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlGarazs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlUjAuto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlUjAuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlGarazs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -317,9 +374,9 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     }// </editor-fold>//GEN-END:initComponents
 
     private void sldEselyMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldEselyMouseEntered
-        if(tombonbelul(autok, melyikauto)){
-            autok[melyikauto].setDefektEsely((int)sldEsely.getValue());
-        }
+        String s = "esély defektre:";
+        s += (int)sldEsely.getValue() + "%";
+        jLabel4.setText(s);
     }//GEN-LAST:event_sldEselyMouseEntered
 
     private void btnResetUezemaDefektActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetUezemaDefektActionPerformed
@@ -341,37 +398,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     }//GEN-LAST:event_btnGarazsbaActionPerformed
 
     private void chbDefektActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbDefektActionPerformed
-        
-    }//GEN-LAST:event_chbDefektActionPerformed
-
-    private void sldEselyMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldEselyMouseExited
-        
-    }//GEN-LAST:event_sldEselyMouseExited
-
-    private void sldEselyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldEselyMouseReleased
-        if(tombonbelul(autok, melyikauto)){
-            autok[melyikauto].setDefektEsely((int)sldEsely.getValue());
-            String s = "esély defektre:";
-            s += (int)sldEsely.getValue() + "%";
-            jLabel4.setText(s);
-        }   
-    }//GEN-LAST:event_sldEselyMouseReleased
-
-    private void btnMegyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMegyActionPerformed
-        if(tombonbelul(autok, melyikauto)){
-            autok[melyikauto].megy();
-            //txaAllapot.setText("MEGY utáni állapot változás...");
-        }
-    }//GEN-LAST:event_btnMegyActionPerformed
-
-    private void btnTankol1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTankol1ActionPerformed
-        if(tombonbelul(autok, melyikauto)){
-            autok[melyikauto].tankol();
-            //txaAllapot.setText("TANKOL utáni állapot változás...");
-        }
-    }//GEN-LAST:event_btnTankol1ActionPerformed
-
-    private void chbDefektStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chbDefektStateChanged
         if(chbDefekt.isSelected()){
             if(tombonbelul(autok, melyikauto)){
                 sldEsely.setEnabled(true);
@@ -392,6 +418,33 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
                 jLabel4.setText(s);
             }
         }
+    }//GEN-LAST:event_chbDefektActionPerformed
+
+    private void sldEselyMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldEselyMouseExited
+        
+    }//GEN-LAST:event_sldEselyMouseExited
+
+    private void sldEselyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldEselyMouseReleased
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].setDefektEsely((int)sldEsely.getValue());
+        }   
+    }//GEN-LAST:event_sldEselyMouseReleased
+
+    private void btnMegyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMegyActionPerformed
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].megy();
+        }
+    }//GEN-LAST:event_btnMegyActionPerformed
+
+    private void btnTankol1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTankol1ActionPerformed
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].tankol();
+            //txaAllapot.setText("TANKOL utáni állapot változás...");
+        }
+    }//GEN-LAST:event_btnTankol1ActionPerformed
+
+    private void chbDefektStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chbDefektStateChanged
+        
     }//GEN-LAST:event_chbDefektStateChanged
 
     private void cmbAutokItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbAutokItemStateChanged
@@ -405,6 +458,28 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             List_autok.removeAll();
         }
     }//GEN-LAST:event_cmbAutokItemStateChanged
+
+    private void sldEselyPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sldEselyPropertyChange
+        
+    }//GEN-LAST:event_sldEselyPropertyChange
+
+    private void Bt_inditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bt_inditActionPerformed
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].motor(true);
+        }
+    }//GEN-LAST:event_Bt_inditActionPerformed
+
+    private void Bt_leallitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bt_leallitActionPerformed
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].motor(false);
+        } 
+    }//GEN-LAST:event_Bt_leallitActionPerformed
+
+    private void Bt_cserelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bt_cserelActionPerformed
+        if(tombonbelul(autok, melyikauto)){
+            autok[melyikauto].kereketCserel();
+        }
+    }//GEN-LAST:event_Bt_cserelActionPerformed
     
     private <T> boolean tombonbelul(T[] tomb, int szam){
         return szam >= 0 && szam < tomb.length;
@@ -425,6 +500,25 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         chbDefekt.setEnabled(active);
     }
     
+    private void kedvesuzenet() throws HeadlessException {
+        File f = new File("inditva.txt");
+        if(!f.exists()){
+            JOptionPane.showMessageDialog(this,
+                    """
+                            Kedves Tanár úr!
+
+                            A GUI szar volt, de kijavítottam.
+                            Most már kevésbé szar.
+                        """);
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(GuiAutosProgram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    
     private String[] getAllItemsFromComboBox(JComboBox cmb){
         String[] items = new String[cmb.getItemCount()];
         for (int i = 0; i < cmb.getItemCount(); i++) {
@@ -432,6 +526,8 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
         }
         return items;
     }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -469,6 +565,9 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Bt_cserel;
+    private javax.swing.JButton Bt_indit;
+    private javax.swing.JButton Bt_leallit;
     private javax.swing.JCheckBox Chk_beintitva;
     private javax.swing.JCheckBox Chk_defekt;
     private javax.swing.JList<String> List_autok;
@@ -484,7 +583,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
     private javax.swing.JComboBox<String> cmbAutok;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -507,7 +605,7 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             demoList.addElement((Object)"Pótkerekek száma: %d".formatted(autok[melyikauto].getPotkerekek()));
             demoList.addElement((Object)"Kerekek: %s".formatted(autok[melyikauto].getDefekt() ? "Defektesek." : "Nem defektesek."));
             demoList.addElement((Object)"Esély a defektre: %d".formatted(autok[melyikauto].getDefektEsely()));
-            List_autok = new JList(demoList);
+            List_autok.setModel(demoList);
         }
     }
 }
