@@ -73,10 +73,10 @@ public class Auto {
     }
     // <editor-fold defaultstate="collapsed" desc="control">
     public boolean megy(){
-        boolean both = motormegy && uzemanyag > 0 && !defektes;
+        boolean both = motormegy && uzemanyag > 0 && defektes == false;
         uzemanyag -= both ? 1 : 0;
         motormegy = motormegy && uzemanyag > 0;
-        defektes = both && (int)(Math.random() * 100) < defektesely; // Valamennyi eséllyel defektet kap
+        defektes = defektes || (int)(Math.random() * 100) < defektesely; // Valamennyi eséllyel defektet kap
         broadcast(Broad.adatvaltozas);
         return both;
     }

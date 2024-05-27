@@ -145,7 +145,6 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
                             .addGroup(pnlUjAutoLayout.createSequentialGroup()
                                 .addComponent(Chk_beintitva)
                                 .addGap(23, 23, 23)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 2, Short.MAX_VALUE))
                     .addGroup(pnlUjAutoLayout.createSequentialGroup()
                         .addGroup(pnlUjAutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,6 +210,11 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
 
         sldEsely.setValue(0);
         sldEsely.setEnabled(false);
+        sldEsely.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldEselyStateChanged(evt);
+            }
+        });
         sldEsely.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 sldEselyMouseEntered(evt);
@@ -480,6 +484,12 @@ public class GuiAutosProgram extends javax.swing.JFrame  implements EI.BBListene
             autok[melyikauto].kereketCserel();
         }
     }//GEN-LAST:event_Bt_cserelActionPerformed
+
+    private void sldEselyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldEselyStateChanged
+        String s = "esély defektre:";
+        s += (int)sldEsely.getValue() + "%";
+        jLabel4.setText(s);
+    }//GEN-LAST:event_sldEselyStateChanged
     
     private <T> boolean tombonbelul(T[] tomb, int szam){
         return szam >= 0 && szam < tomb.length;
