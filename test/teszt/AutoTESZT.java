@@ -24,20 +24,21 @@ public class AutoTESZT {
        new TesztObjektum(4, true), // Kereket kiszúr
        new TesztObjektum(3, false), // Megy
        //5
+       new TesztObjektum(3, false), // Menni próbál
        new TesztObjektum(5, true), // Kereket cserél
        // Motorleállítás
        new TesztObjektum(0, true),
        new TesztObjektum(2, true),  // tankol
        new TesztObjektum(3, false), // Megy
        // Üzemanyag nélkül
-       new TesztObjektum(1, true), // Motrot indít
        //10 
+       new TesztObjektum(1, true), // Motrot indít
        new TesztObjektum(6, true), // Tét nélkül megy
        new TesztObjektum(6, true), // Tét nélkül megy
        new TesztObjektum(6, true), // Tét nélkül megy
        new TesztObjektum(6, true), // Tét nélkül megy
-       new TesztObjektum(6, false), // Tét nélkül megy
        //15
+       new TesztObjektum(6, false), // Tét nélkül megy
     };
     
      /**
@@ -84,7 +85,7 @@ public class AutoTESZT {
             
             
             
-            if(true /*&& !both*/) {AuxiliaryFunctions.KonzolraKiir("%d. ".formatted(i) + muveletNev + allapot());}
+            //if(true /*&& !both*/) {AuxiliaryFunctions.KonzolraKiir("%d. ".formatted(i) + muveletNev + allapot());}
             assert both : "A %d. teszteset nem működött megfelelően.".formatted(i);
         }
     }
